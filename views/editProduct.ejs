@@ -1,0 +1,47 @@
+<!-- editProduct.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product</title>
+    <link rel="stylesheet" href="/edit.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Product</h1>
+        <form action="/editPost/<%= product._id %>" method="post" enctype="multipart/form-data">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="<%= product.name %>">
+
+            <label for="image">Image URL:</label>
+            <input type="file" id="image1" name="image1" accept="image/*" value="<%= product.image1 %>" >
+
+            <label for="image">Image URL:</label>
+            <input type="file" id="image1" name="image2" accept="image/*" value="<%= product.image1 %>" >
+
+            <label for="image">Image URL:</label>
+            <input type="file" id="image1" name="image3" accept="image/*" value="<%= product.image1 %>" >
+
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" value="<%= product.price %>">
+
+            <label for="discountPrice">Discount Price:</label>
+            <input type="number" id="discountPrice" name="discountPrice" value="<%= product.discountPrice %>">
+
+            <label for="category">Category:</label>
+            <input type="text" id="category" name="category" value="<%= product.category %>">
+
+            <label for="details">Details:</label>
+            <textarea id="details" name="details"><%= product.details %></textarea>
+
+            <label for="stock">Stock:</label>
+            <input type="number" id="stock" name="stock" value="<%= product.stock %>">
+
+
+            <button type="submit">Update Product</button>
+        </form>
+    </div>
+</body>
+</html>
