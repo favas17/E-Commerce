@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Banner</title>
+    <link rel="stylesheet" href="/banner.css">
+</head>
+<body>
+    <h1>Add New Banner</h1>
+
+    <div id="addBannerForm">
+        <div class="input-group">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title">
+        </div>
+        <div class="input-group">
+            <label for="subtitle">Subtitle:</label>
+            <input type="text" id="subtitle" name="subtitle">
+        </div>
+        <div class="input-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description"></textarea>
+        </div>
+        <div class="input-group">
+            <label for="image">Select Image:</label>
+            <input type="file" id="image" name="image">
+        </div>
+        <button id="uploadButton">Add Banner</button>
+    </div>
+
+    <a href="/Banners" class="btn">Back to Banners</a>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script>
+        document.getElementById('uploadButton').addEventListener('click', function() {
+            const formData = new FormData();
+            formData.append('title', document.getElementById('title').value);
+            formData.append('subtitle', document.getElementById('subtitle').value);
+            formData.append('description', document.getElementById('description').value);
+            formData.append('image', document.getElementById('image').files[0]);
+
+            fetch('/addBanner', { // Updated endpoint
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+        });
+    </script>
+</body>
+</html>
