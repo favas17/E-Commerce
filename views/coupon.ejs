@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coupon Page</title>
+    <link rel="stylesheet" href="/coupon.css">
+</head>
+<body>
+    <div class="coupon-container">
+        <h2>Add Coupon</h2>
+        <form  class="coupon-form" >
+            <div class="form-group">
+                <label for="coupon-code">Coupon Code:</label>
+                <input type="text" id="couponCode" name="couponCode" required>
+            </div>
+            <div class="form-group">
+                <label for="coupen-upto">Discount</label>
+                <input type="number" id="discount" name="discount" required>
+            </div>
+            <div class="form-group">
+                <label for="coupen-upto">Minimum Purchase</label>
+                <input type="number" id="minimumPurchase" name="minimumPurchase" required>
+            </div>
+            <div class="form-group">
+                <label for="valid-from">Valid From:</label>
+                <input type="date" id="validFrom" name="validFrom" required>
+            </div>
+            <div class="form-group">
+                <label for="valid-to">Valid To:</label>
+                <input type="date" id="validTo" name="validTo" required>
+            </div>
+            <button onclick="addCoupen()" type="button">Add Coupon</button>
+        </form>
+    </div>
+
+    <script>
+        async function addCoupen(){
+            try{
+                const couponCode = document.getElementById('couponCode').value;
+                const discount = document.getElementById('discount').value;
+                const minimumPurchase = document.getElementById('minimumPurchase').value;
+                const validFrom = document.getElementById('validFrom').value;   
+                const validTo = document.getElementById('validTo').value;
+            
+            
+            const response = await fetch(`/uploadCoupon`,{
+                method:'POST',
+                headers: {
+                    'Content-Type':'application/json',
+                },
+                body: JSON.stringify({couponCode,discount,minimumPurchase,validFrom,validTo}),
+            });
+
+            if(!response.ok){
+                throw new Error('network error')
+            }
+
+            const data = await response.text();
+            console.log(data);
+
+        }
+        catch(error){
+            console.error(error)
+        }
+        
+    }
+    </script>
+</body>
+</html>
