@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evara - Unleashing Elegance in Every Purchase | Premium Home Decor & Lifestyle Essentials</title>
+    
+    <!-- Meta Description -->
+    <meta name="description" content="Discover luxury at Evara! Explore exquisite home decor & lifestyle essentials. Elevate your space with timeless elegance. Shop now!">
+    
+    <!-- Keywords -->
+    <meta name="keywords" content="Luxury Home Decor, Premium Lifestyle Essentials, Elegant Furnishings, Stylish Homeware, Exclusive Interior Accessories, Chic Decor Accents, Unique Home Furnishings">
+
+    <!-- Robots Meta Tag -->
+    <meta name="robots" content="index, follow">
+    
+    <!-- OG (Open Graph) Tags -->
+    <meta property="og:title" content="Evara - Unleashing Elegance in Every Purchase | Premium Home Decor & Lifestyle Essentials">
+    <meta property="og:description" content="Discover luxury at Evara! Explore exquisite home decor & lifestyle essentials. Elevate your space with timeless elegance. Shop now!">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:title" content="Evara - Unleashing Elegance in Every Purchase | Premium Home Decor & Lifestyle Essentials">
+    <meta name="twitter:description" content="Discover luxury at Evara! Explore exquisite home decor & lifestyle essentials. Elevate your space with timeless elegance. Shop now!">
+    <!-- =================================================================
+                             Link Custom CSS File
+    ================================================================== -->
+    <link rel="stylesheet" href="/userHome.css">
+
+    <!-- =================================================================
+                             Link Favicon
+    ================================================================== -->
+    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
+    <!-- =================================================================
+                             SWIPER JS CDN
+    ================================================================== -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <!-- =================================================================
+                             Remix Icon CDN
+    ================================================================== -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.7.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+
+<body>
+
+ 
+    <!-- ================================================ HEADER ================================================ -->
+    <header class="header" id="header">
+        <div class="header-top">
+            <div class="header-container flexitem container">
+                <div class="header-contact">
+                    <span>(+01) - 2345 - 6789</span>
+                    <span> Our Location</span>
+                </div>
+                <p class="header-alert-news">
+                    Get 30% extra discount on your first order.
+                </p>
+                <a href="/login" class="header-top-action">
+                    Log in
+                </a>
+                <a href="/signup" class="header-top-action">
+                    Sign Up
+                </a>
+            </div>
+        </div>
+        <nav class="navbar flexitem container">
+            <a href="index.html" class="nav-logo">
+                <img src="assets/images/logo.svg" alt="" class="nav-logo-img">
+            </a>
+
+            <div class="nav-menu flexitem" id="nav-menu">
+                <div class="nav-menu-top">
+                    <a href="index.html" class="nav-menu-logo">
+                        <img src="assets/images/logo.svg" alt="">
+                    </a>
+                    <div class="nav-close" id="nav-close">
+                        <i class="ri-close-line"></i>
+                    </div>
+                </div>
+                <ul class="nav-list flexitem">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link active-link">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="shop.html" class="nav-link">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/myAccount" class="nav-link">My Account</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="compare.html" class="nav-link">Compare</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="login-register.html" class="nav-link">Login</a>
+                    </li>
+                </ul>
+                <div class="dropdown">
+                    <button class="dropbtn">Men</button>
+                    <div class="dropdown-content">
+                        <% menCategory.subcategory.forEach(subcategory => { %>
+                            <a href="/products?category=Men&subcategory=<%= subcategory %>"><%= subcategory %></a>
+                        <% }); %>
+                    </div>
+                </div>
+                
+                <!-- Women's Dropdown -->
+                <div class="dropdown">
+                    <button class="dropbtn">Women</button>
+                    <div class="dropdown-content">
+                        <% womenCategory.subcategory.forEach(subcategory => { %>
+                            <a href="/products?category=Women&subcategory=<%= subcategory %>"><%= subcategory %></a>
+                        <% }); %>
+                    </div>
+                </div>                 
+
+                <div class="header-search">
+                    <input type="text" id="searchInput"  placeholder="Search Products..." class="form-input">
+                    <button class="search-btn" id="searchButton">
+                        <img src="assets/search.png" alt="">
+                    </button>
+                </div>
+            </div>
+
+            <div class="header-user-action flexitem">
+                <a href="/wishlist" class="header-action-btn">
+                    <img src="assets/icon-heart.svg" alt="">
+                    <!-- <span class="count">3</span> -->
+                </a>
+                <a href="/cart" class="header-action-btn">
+                    <img src="assets/icon-cart.svg" alt="">
+                    <!-- <span class="count">5</span> -->
+                </a>
+
+                <div class="header-action-btn nav-toggle" id="nav-toggle">
+                    <img src="assets/images/menu-burger.svg" alt="">
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ================================================ MAIN ================================================ -->
+    <main class="main">
+
+    <!-- ================================================ Banner ================================================ -->
+
+
+        <section class="home section-lg" id="home">
+            <div class="home-container container grid" id="bannerContainer">
+                <div class="home-content">
+                    <span class="home-subtitle">Hot promotions</span>
+                    <h1 class="home-title">Fashion Trending <br> <span>Great Collection</span></h1>
+                    <p class="home-description">Explore our curated collection. Elevate your home with quality and style. Shop now for unique decor that reflects your taste.</p>
+                    <a href="shop.html" class="btn">Shop Now</a>
+                </div>
+                <img src="assets/home-img.png" alt="" class="home-img">
+            </div>
+        </section>
+        <!-- ================================================ HOME ================================================ -->
+        
+        <section class="products section container">
+            <div class="tab-btns flexitem">
+                <span class="tab-btn active-tab" data-target="#featured">Featured</span>   
+                <span class="tab-btn" data-target="#popular">Popular</span>
+                <span class="tab-btn" data-target="#new-added">New Added</span>
+            </div>
+    
+            <div class="tab-items">
+                <div class="tab-item active-tab" content id="featured">
+                    <div class="products-container grid" id="productList">
+                        <% product.forEach(function(product) { %>
+                            <div class="product-item">
+                                <div class="product-banner">
+                                    <a href="/details/<%= product._id %>" class="product-images">
+                                        <img src="/uploads/<%= product.productImage2%>" alt="1" class="product-img default">
+                                        <img src="/uploads/<%= product.productImage2%>" alt="1" class="product-img hover">
+                                    </a>
+    
+                                    <!-- <div class="product-actions">
+                                        <button class="action-btn" aria-label="Quick View">
+                                            <i class="ri ri-eye-line"></i>
+                                        </button>
+                                    
+                                        <button class="action-heart-btn" onclick="addToWishlist('<%= product._id %>')" aria-label="Add to Wishlist">
+                                            <i class="ri ri-heart-3-line"></i>
+                                        </button>
+                                    
+                                        <button class="action-btn" aria-label="Compare">
+                                            <i class="ri ri-shuffle-line"></i>
+                                        </button>
+                                    </div> -->
+                                    
+                                </div>
+    
+                                <div class="product-content">
+                                    <span class="product-category"><%= product.category %></span>
+                                    <a href="details.html">
+                                        <h3 class="product-title"><%= product.name %></h3>
+                                    </a>
+                                    <div class="product-rating">
+                                        <!-- Your rating display logic here -->
+                                    </div>
+                                    <div class="product-price flexitem">
+                                        <span class="new-price">₹<%= product.discountPrice %></span>
+                                        <span class="old-price">₹<%= product.price %></span>
+                                    </div>
+    
+                                    <button class="action-btn cart-btn" aria-label="Add to Cart" onclick="addToCart('<%= product._id %>','add')">
+                                        <i class="ri-shopping-bag-line"></i>
+                                        </button>
+                                    <button id="wishlistButton-<%= product._id %>"  class="action-heart-btn" onclick="addToWishlist('<%= product._id %>')" >
+                                            <i class="ri ri-heart-3-line"></i>
+                                        </button>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                   
+                </div>    
+            </div>
+            <div class="pagination">
+                <% if(hasPreviousPage) { %>
+                    <a href="?query=<%= query %>&page=<%= previousPage %>">&laquo; Previous</a>
+                <% } %>
+                <% if(hasNextPage) { %>
+                    <a href="?query=<%= query %>&page=<%= nextPage %>">Next &raquo;</a>
+                <% } %>
+            </div>
+        </section>
+
+        <!-- ================================================ DEALS ================================================ -->
+
+        <!-- ================================================ NEWSLETTER ================================================ -->
+        <section class="newsletter section home-newsletter">
+            <div class="newsletter-container container grid">
+                <h3 class="newsletter-title flexitem">
+                    <img src="assets/images/icon-email.svg" alt="" class="newsletter-icon">
+                    Sign Up to Newsletter
+                </h3>
+                <p class="newsletter-description">
+                    ...and recieve $25 coupon for first shopping.
+                </p>
+                <form action="" class="newsletter-form">
+                    <input type="email" placeholder="Enter Your Email" class="newsletter-input">
+                    <button type="submit" class="newsletter-btn">Subscribe</button>
+                </form>
+            </div>
+        </section>
+    </main>
+    <!-- ================================================ FOOTER ================================================ -->
+    <footer class="footer container">
+        <div class="footer-container grid">
+            <div class="footer-content">
+                <a href="index.html" class="footer-logo">
+                    <img src="assets/images/logo.svg" alt="" class="footer-logo-img">
+                </a>
+                <h4 class="footer-subtitle">Contact</h4>
+                <p class="footer-description">
+                    <span>Address:</span> 562 Wellington Road, Street 32, San Francisco
+                </p>
+                <p class="footer-description">
+                    <span>Phone:</span> +01 2222 365 / (+91) 01 2345 6789
+                </p>
+                <p class="footer-description">
+                    <span>Hours:</span> 10:00 - 18:00, Monday - Saturday
+                </p>
+
+                <div class="footer-social">
+                    <h4 class="footer-subtitle">Follow Me :</h4>
+
+                    <div class="footer-social-links flexitem">
+                        <a href="#">
+                            <img src="assets/images/icon-facebook.svg" alt="" class="footer-social-icon">
+                        </a>
+                        <a href="#">
+                            <img src="assets/images/icon-twitter.svg" alt="" class="footer-social-icon">
+                        </a>
+                        <a href="#">
+                            <img src="assets/images/icon-instagram.svg" alt="" class="footer-social-icon">
+                        </a>
+                        <a href="#">
+                            <img src="assets/images/icon-pinterest.svg" alt="" class="footer-social-icon">
+                        </a>
+                        <a href="#">
+                            <img src="assets/images/icon-youtube.svg" alt="" class="footer-social-icon">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-content">
+                <h3 class="footer-title">My Account</h3>
+
+                <ul class="footer-links">
+                    <li><a href="#" class="footer-link">Sign In</a></li>
+                    <li><a href="#" class="footer-link">View Cart</a></li>
+                    <li><a href="#" class="footer-link">My Wishlist</a></li>
+                    <li><a href="#" class="footer-link">Track My Order</a></li>
+                    <li><a href="#" class="footer-link">Help</a></li>
+                    <li><a href="#" class="footer-link">Order</a></li>
+                </ul>
+            </div>
+            <div class="footer-content">
+                <h3 class="footer-title">Address</h3>
+
+                <ul class="footer-links">
+                    <li><a href="#" class="footer-link">About Us</a></li>
+                    <li><a href="#" class="footer-link">Delivery Information</a></li>
+                    <li><a href="#" class="footer-link">Privacy Policy</a></li>
+                    <li><a href="#" class="footer-link">Terms & Conditions</a></li>
+                    <li><a href="#" class="footer-link">Contact Us</a></li>
+                    <li><a href="#" class="footer-link">Support Center</a></li>
+                </ul>
+            </div>
+            <div class="footer-content">
+                <h3 class="footer-title">Secured Payment Gateway</h3>
+
+                <img src="assets/images/payment-method.png" alt="" class="payment-img">
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p class="copyright">&copy; 2023 Evara. All rights reserved.</p>
+            <span class="designer">Made with <i class="ri-heart-fill" style="color: #ff7171;"></i> by Dev Sethi.</span>
+        </div>
+    </footer>
+
+    <!-- =================================================================
+                             SWIPER JS CDN
+    ================================================================== -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- =================================================================
+                             Link Custom JS File
+    ================================================================== -->
+    <script src="assets/js/script.js"></script>
+    <script>
+        async function addToWishlist(productId){
+            try{
+            const response = await fetch(`/addToWishlist/${productId}`,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+                if(!response.ok){
+                    throw new Error('Network error')
+                };
+                const data = await response.json();
+                console.log(data.message);
+                let clickedButton = document.querySelector(`#wishlistButton-${productId}`);
+                if(data.added){
+                    clickedButton.classList.add('added') 
+                }else{
+                        clickedButton.classList.remove('added')
+                }
+            }
+            catch(error){
+                console.error(error)
+            }
+        }
+
+         async function addToCart(productId,operation){
+            try {
+                const response = await fetch(`/addToCart/${productId}/${operation}`,{
+                    method:'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if(!response.ok){
+                    throw new Error('network error')
+                }
+                const data = await response.json();
+                console.log(data.message)
+
+                // updating the quantity by cliking the plus button
+                const quantityPlace = document.querySelector(`#quantities-${productId}`);
+                if(quantityPlace){
+                quantityPlace.value = parseInt(quantityPlace.value) + (operation === 'add' ? 1: -1);
+            }   
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        
+        // async function updateWishlistUI() {
+        //     try{
+        //         const response = await fetch(`http://localhost:8989/wishlistData`,{
+        //             method:'GET',
+        //             headers: {
+        //                 'Content-Type':'application/json'
+        //             },
+        //         });
+        //         if(!response.ok){
+        //             throw new Error('Network error')
+        //         }
+        //         const wishlistData = await response.json();
+
+        //         wishlistData.forEach(productId =>{
+        //             const button = document.querySelector(`#wishlistButton-${productId}`)
+        //             if(button){
+        //                 button.classList.add('added')
+        //             }
+        //         }); 
+        //     }
+        //     catch(error){
+        //         console.error(error)
+        //     }
+        // }
+
+//         document.addEventListener('DOMContentLoaded', async function() {
+//             try {
+//                 const response = await fetch('/categoriesHome', {
+//                     method: 'GET',
+//                     headers: {
+//                         'Content-Type': 'application/json'
+//                     }
+//                 });
+//                 const categories = await response.json();
+//                 const categoryDropdown = document.getElementById('categoryDropdown');
+//                 const dropdownContent = categoryDropdown.querySelector('.dropdown-content');
+//                 categories.forEach(category => {
+//                     const categoryElement = document.createElement('div');
+//                     categoryElement.className = 'category';
+//                     categoryElement.innerHTML = `<h3>${category.category}</h3>`;
+//                     category.subcategory.forEach(subcategory => {
+//                         categoryElement.innerHTML += `<p>${subcategory}</p>`;
+//                     });
+//                     dropdownContent.appendChild(categoryElement);
+//                     categoryElement.addEventListener('mouseover', () => {
+//                         // Fetch and display products for the selected category
+//                         displayProducts(category.category);
+//                     });
+//                 });
+//             } catch (error) {
+//                 console.error(error);
+//             }
+//         });
+    
+//         async function displayProducts(category) {
+//     try {
+//         const response = await fetch(`/products/${category}`, {
+//             method: 'GET',
+//             headers: {
+//                 'Content-Type': 'application/json'
+//             }
+//         });
+//         const products = await response.json();
+//         const productList = document.getElementById('productList');
+        
+//         // Check if productList is null before proceeding
+//         if (!productList) {
+//             console.error('Product list element not found');
+//             return;
+//         }
+
+//         // Clear previous product list
+//         productList.innerHTML = '';
+
+//         // Append child nodes for each product
+//         products.forEach(product => {
+//             const productElement = document.createElement('div');
+//             productElement.className = 'product-card';
+//             productElement.innerHTML = `
+//                 <div class="product-img">
+//                     <img src="${product.imageUrl}" alt="${product.name}">
+//                 </div>
+//                 <div class="product-content">
+//                     <h3>${product.name}</h3>
+//                     <p class="price">$${product.price}</p>
+//                     <p>${product.description}</p>
+//                     <button class="btn">Add to Cart</button>
+//                 </div>
+//             `;
+//             productList.appendChild(productElement);
+//         });
+//     } catch (error) {
+//         console.error(error);
+//     }
+// }
+    </script>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+
+    // Add event listener to the search input field
+    searchButton.addEventListener('click', function() {
+        try {
+            const query = searchInput.value.trim(); // Get the search query
+
+            if (query) {
+                window.location.href = `/search?query=${query}`;
+            }
+    }
+    catch(error){
+        console.error(error)
+    }
+    });
+
+    // function renderProducts(products) {
+    //     const productList = document.getElementById('productList');
+    //     productList.innerHTML = ''; // Clear previous product list
+
+    //     products.forEach(product => {
+    //         const productElement = document.createElement('div');
+    //         productElement.className = 'product-item';
+    //         productElement.innerHTML = `
+
+    //             <div class="product-content">
+    //                 <span class="product-category"><%= product.category %></span>
+    //                 <a href="details.html">
+    //                     <h3 class="product-title"><%= product.name %></h3>
+    //                 </a>
+    //                 <div class="product-price flexitem">
+    //                     <span class="new-price">₹<%= product.discountPrice %></span>
+    //                     <span class="old-price">₹<%= product.price %></span>
+    //                 </div>
+    //                 <button class="action-btn cart-btn" aria-label="Add to Cart" onclick="addToCart('<%= product._id %>','add')">
+    //                     <i class="ri-shopping-bag-line"></i>
+    //                 </button>
+    //                 <button id="wishlistButton-<%= product._id %>"  class="action-heart-btn" onclick="addToWishlist('<%= product._id %>')">
+    //                     <i class="ri ri-heart-3-line"></i>
+    //                 </button>
+    //             </div>
+    //         `;
+    //         productList.appendChild(productElement);
+    //     });
+    // }
+});
+</script>
+
+
+</body>
+
+</html>
