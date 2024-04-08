@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Categories and Subcategories</title>
+    <link rel="stylesheet" href="/category.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Manage Categories and Subcategories</h1>
+        <form action="/addCategory" id="category-form" method="post">
+            <h2>Add Category</h2>
+            <div class="form-group">
+                <label for="category-name">Category Name:</label>
+                <input type="text" id="category-name" name="categoryName" >
+            </div>
+            <button type="submit">Add Category</button>
+        </form>
+        <form action="/addSubcategory" method="post">
+            <h2>Add Subcategory</h2>
+            <div class="form-group">
+                <label for="subcategory-name">Subcategory Name:</label>
+                <input type="text" id="subcategory-name" name="subcategoryName" >
+            </div>
+            <div class="form-group">
+                <label for="parent-category">Parent Category:</label>
+                <select id="parent-category" name="parentCategory" >
+                    <% categ.forEach((categ)=>{ %>
+                        <option value="<%= categ._id%>"><%= categ.category %></option>
+                    <% }) %>
+                    </select>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
