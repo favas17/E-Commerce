@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/addproduct.css">
+    <title>Add Product</title>
+</head>
+<body>
+    <div class="container">
+        <form action="/addProduct" method="post" enctype="multipart/form-data">
+            <h2>Add Product</h2>
+            
+            <div class="form-group">
+                <label for="productName">Product Name:</label>
+                <input type="text" id="productName" name="productName" >
+            </div>
+
+            <div class="form-group">
+                <label for="image1">Image 1:</label>
+                <input type="file" id="image1" name="image1" accept="image/*" >
+            </div>
+
+            <div class="form-group">
+                <label for="image2">Image 2:</label>
+                <input type="file" id="image2" name="image2" accept="image/*" >
+            </div>
+
+            <div class="form-group">
+                <label for="image3">Image 3:</label>
+                <input type="file" id="image3" name="image3" accept="image/*" >
+            </div>
+
+
+            <div class="form-group">
+                <label for="basePrice">Base Price:</label>
+                <input type="number" min="0" name="price" class="form-control bg-light" id="basePrice"
+                placeholder="Enter base price" />
+           </div>
+
+
+           <div class="form-group">
+            <label for="basePrice">Discount Price:</label>
+            <input type="number" min="0" name="discountPrice" class="form-control bg-light" id="discountPrice"
+            placeholder="Enter discount price" />
+       </div>
+
+
+
+            <div class="form-group">
+                <label for="productDetails">Product Details :</label>
+                <textarea class="form-control bg-light" name="details" id="productSpecification"
+                placeholder="Enter product details" ></textarea>
+
+
+
+            <div class="form-group">
+                <label for="quantity">Quantity:</label>
+               <input type="number" min="0" name="stock" class="form-control bg-light" id="quantity"
+                placeholder="Enter quantity"  />
+            </div>
+
+
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select class="form-select bg-light" id="category" name="category">
+                    <% categories.forEach(category => { %>
+                        <option value="<%= category.category %>"><%= category.category %></option>
+                    <% }) %>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="subcategory">Subcategory:</label>
+                <select class="form-select bg-light" id="subcategory" name="subcategory">
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button type="submit">Add Product</button>
+            </div>
+        </form>
+    </div>
+    <script>
+         document.getElementById('category').addEventListener('change', async function() {
+        const selectedCategory = this.value;
+        const subcategoryDropdown = document.getElementById('subcategory');
+        subcategoryDropdown.innerHTML = ''; // Clear previous options
+
+        try {
+            const response = await fetch('/subcategories', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ category: selectedCategory })
+            });
+            const data = await response.json();
+
+            if (data.subcategories && data.subcategories.length > 0) {
+                data.subcategories.forEach(subcategory => {
+                    const option = document.createElement('option');
+                    option.value = subcategory;
+                    option.textContent = subcategory;
+                    subcategoryDropdown.appendChild(option);
+                });
+            } else {
+                // Handle case where no subcategories are available
+                const option = document.createElement('option');
+                option.textContent = 'No subcategories available';
+                subcategoryDropdown.appendChild(option);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    });
+    </script>
+</body>
+</html>
