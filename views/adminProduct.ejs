@@ -1,0 +1,65 @@
+<%- include('./adminHome.ejs') %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Products</title>
+</head>
+<link rel="stylesheet" href="/adminProduct.css">
+<script src="https://kit.fontawesome.com/ce01cf2811.js" crossorigin="anonymous"></script>
+<body>
+  <a href="/addProduct" class="add"><i class="fa-solid fa-plus"></i> Add a Product</a>
+  <div class="content">
+    <h1>Products</h1>
+    <% if (product.length > 0) { %>
+      <table>
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th class="description">Description</th>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>Discount Price</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+          <% product.forEach((product) => { %>
+            <tr>
+              <td>
+                <% if (product.productImage1 && product.productImage1.length > 0) { %>
+                  <img src="/uploads/<%= product.productImage1%>" alt="1" class="product-img default">
+                <% } %>
+              </td>
+              <td><%= product.name %></td>
+              <td><%= product.category %></td>
+              <td><%= product.details %></td>
+              <td><%= product.stock %></td>
+              <td>₹ <%= product.price %></td>
+              <td>
+                <% if (product.discountPrice) { %>
+                  ₹ <%= product.discountPrice %>
+                <% } %>
+              </td>
+              <td>
+                <a href="/editProduct/<%= product._id %>">
+                  <button class="btn1"><i class="fa-solid fa-pen-to-square"></i></button>
+                </a>
+              </td>
+              <td>
+                <form action="/deleteProduct/<%= product._id %>" method="post" >
+                  <button type="submit" class="btn2"><i class="fa-regular fa-trash-can"></i></button>
+                </form>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <p>No products available.</p>
+    <% } %>
+  </div>
+</body>
+</html>
