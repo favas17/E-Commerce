@@ -1,0 +1,52 @@
+<!-- customerList.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer List</title>
+    <link rel="stylesheet" href="/users.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Customer List</h1>
+        <% if (users.length >0 ) { %>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>Block</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach((users)=>{ %>
+                
+                <tr>
+                    <td><%= users.username %></td>
+                    <td><%= users.email %></td>
+                    <td><%= users.mobile %></td>
+                    <td>
+                        <a href="/blockSettings/<%= users._id %>">
+                        <button class="block-btn">Block</button>
+                    </a>
+                    </td>
+                    <td>
+                        <form action="/deleteUser/<%= users._id %>" method="post">
+                        <button type="submit" class="remove-btn">Remove</button>
+                    </form>
+                </td>
+                </tr>
+          <%  }); %>
+            </tbody>
+        </table>
+        <%  } else { %>
+            <p>no users found</p>
+       <% } %>
+    </div>
+</body>
+</html>
