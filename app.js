@@ -1,48 +1,37 @@
 const express = require('express');
 const app = express();
-const dotenv = require('dotenv').config()
-const dbConnect = require('./confiq/db.Connect');
-const PORT = process.env.PORT || 9898;
+const dotenv = require('dotenv').config();
+const session = require('express-session');
+const mongoose = require('mongoose'); // Ensure mongoose is required
+const connectDB = require('../E-Commerce/utilities/db');
 const path = require('path');
 const userRoutes = require('./router/userRoutes');
-const adminRoutes = require('./router/adminRoutes')
-dbConnect();
+const adminRoutes = require('./router/adminRoutes');
 
+const PORT = process.env.PORT || 9898;
+
+// Connect to MongoDB
+connectDB();
 
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
-// app.use('/public', express.static('public', { 
-//     setHeaders: (res, path) => {
-//       if (path.endsWith('.css')) {
-//         res.setHeader('Content-Type', 'text/css');
-//       }
-//     }
-//   }));
-// app.use(express.staticm(path.join(__dirname, 'public')));
 
-const session = require('express-session');
+
 app.use(session({
-  secret:'fvs',
+  secret: 'your-secret-key',
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: false
 }));
 
 app.set('view engine', 'ejs');
-app.set('views', './views')
+app.set('views', './views');
 
-
-
-
-
-
-app.use('/',userRoutes);
-app.use('/',adminRoutes)
-
-
+app.use('/', userRoutes);
+app.use('/', adminRoutes);
 
 app.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`);
+  console.log(`Server started on port ${PORT}`);
 }).on('error', (err) => {
-    console.error(`Error starting server: ${err.message}`);
+  console.error(`Error starting server: ${err.message}`);
 });
