@@ -19,9 +19,9 @@ app.use(express.static('public'));
 
 
 app.use(session({
-  secret: 'your-secret-key',
+  secret: '111',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: true,
 }));
 
 app.set('view engine', 'ejs');

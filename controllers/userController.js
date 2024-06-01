@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const User = require('../models/userModel')
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
+const sendMail = require("../utilities/nodeMailer")
 const PRODUCT = require('../models/productModel')
 const Wishlist_Model = require('../models/wishlistModel')
 const cart_Model = require('../models/cartModel');
@@ -77,19 +78,29 @@ const verifySignup = async (req,res)=>{
             mobile,
         });
         await user.save()
-        .then(()=>{
-            const secretKey = process.env.JWT_SECRET_KEY
-            const expiration = 10000;
+        
+            // const secretKey = process.env.JWT_SECRET_KEY
+            // const expiration = 10000;
             const userId = user._id;
-            const token = jwt.sign({userId: userId}, secretKey, {expiresIn: expiration});
-            req.session.userToken =  token;
-            // console.log(req.session.userToken)
-            // req.session.userId = userId;
-            // console.log(req.session.userId)
-            // req.session.mobile = mobile;
-            // console.log(req.session.mobile)
+            req.session.email = email;
+            // const token = jwt.sign({userId: userId}, secretKey, {expiresIn: expiration});
+            // req.session.userToken =  token;
+
+            // res.status(201).json({success:true,
+            //     message:"User created and otp sended succesfully"});
+                
+
+            // genarating otp
+            const GenarateOtp = Math.floor(1000+Math.random()*9000);
+            // storing the otp in session
+            req.session.otp = GenarateOtp 
+            // goes to otp page
             res.redirect('/otp')
-        })
+            // send mail through nodemailer to user
+            await sendMail(email,GenarateOtp);
+            
+            
+        
        }
     } 
     catch (error) {
@@ -116,11 +127,11 @@ const verifyLogin = async (req,res)=>{
         if(userData){
           const passwordMatch = await bcrypt.compare(password,userData.password);
           if(passwordMatch){
-            const secretKey = process.env.JWT_SECRET_KEY;
-            const expiration = 10000;
+            // const secretKey = process.env.JWT_SECRET_KEY;
+            // const expiration = 10000;
             const userId = userData._id;
-            const token = jwt.sign({ userId: userId}, secretKey, {expiresIn: expiration});
-            req.session.token = token;
+            // const token = jwt.sign({ userId: userId}, secretKey, {expiresIn: expiration});
+            // req.session.token = token;
             req.session.userId = userData._id;
             req.session.email = userData.email;
             res.redirect('/userHome')
@@ -136,14 +147,6 @@ const verifyLogin = async (req,res)=>{
 const loadOtp = async (req,res)=>{
     try {
         res.render('otp',{mobile: req.session.mobile});
-        const mobile = req.session.mobile;
-        const userData = await User.findOne({mobile: mobile});
-        if(userData){
-            client.verify.v2
-            .services(process.env.TWILIO_VERIFY_SID)
-            .verifications.create({to: '+91' + mobile, channel: "sms"})
-            req.session.mobile = mobile;
-        }
         
     } catch (error) {
         console.error(error)
@@ -153,23 +156,29 @@ const loadOtp = async (req,res)=>{
 
 
 const verifyOtp = async (req,res)=>{
+    const sessionOtp = req.session.otp
+    const enteredOtp = req.body.otp
+    const sessionEmail = req.session.email
+            console.log(enteredOtp,"by")
+            console.log(sessionOtp, "hy")
     try {
-        const otp = req.body.otp
-        const mobile = req.session.mobile
-        client.verify.v2
-        .services(process.env.TWILIO_VERIFY_SID)
-        .verificationChecks.create({to: '+91' + mobile, code: otp})
-        .then(async (verification)=>{
-            if(verification.status == "approved"){
-                console.log(verification.status)
+            
+            if(sessionOtp ===Number(enteredOtp) ){
+                const isUser = await user.findOneAndUpdate({email:sessionEmail},{$set:{isVerified:true}},{new:true});
+                    if(isUser){
+                        res.redirect("/userHome")
+                    }else{
+                        res.status(400).send("user not found")
+                    }
+                
+                
             }else{
-                res.status(401).send('user not register')
+                res.status(400).send("OTP is incorrect")
             }
-        })
     } catch (error) {
         console.log(error)
         res.status(500).send('server error')
-    }
+    }   
 }
 
 
@@ -209,17 +218,26 @@ const loadUserPage = async (req,res)=>{
 }
 
 // wish list
-const loadWishlist = async (req,res)=>{
-    try {
-        const userId = req.session.userId;
-        const wishlist = await Wishlist_Model.find({user:userId}).populate('product')
-        // console.log(wishlist[0].product)
-        res.render('wishlist',{wishlist:wishlist[0].product})
-    } catch (error) {
-        console.error(error);
-        res.render('404')
-    }
-}
+// const loadWishlist = async (req, res) => {
+//     try {
+//         const userId = req.session.userId;
+//         if (!userId) {
+//             return res.status(401).send('User not logged in');
+//         }
+
+//         const wishlist = await Wishlist_Model.findOne({ userId: userId }).populate('products');
+//         if (!wishlist || !wishlist.products) {
+//             return res.render('wishlist', { products: [] });
+//         }
+
+//         const products = wishlist.products.map(item => item.product);
+
+//         res.render('wishlist', { products });
+//     } catch (error) {
+//         console.error(error);
+//         res.render('404');
+//     }
+// };
 
 
 // add to wishlist button work
@@ -705,7 +723,7 @@ module.exports = {
     loadOtp,
     verifyOtp,
     loadUserPage,
-    loadWishlist,
+    // loadWishlist,
     addToWishlist,
     deleteWishlist,
     loadDetails,

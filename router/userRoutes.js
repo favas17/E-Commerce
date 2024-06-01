@@ -18,7 +18,7 @@ router.post('/otp',userController.verifyOtp);
 // user home
 router.get('/userHome',userController.loadUserPage)
 // wishlist
-router.get('/wishlist',userController.loadWishlist);
+// router.get('/wishlist',userController.loadWishlist);
 // add to wish list
 router.post('/addToWishlist/:productId',userController.addToWishlist)
 // delete wishlist item
