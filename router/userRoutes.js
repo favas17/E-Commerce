@@ -17,8 +17,10 @@ router.get('/otp',userController.loadOtp);
 router.post('/otp',userController.verifyOtp);
 // user home
 router.get('/userHome',userController.loadUserPage)
+// shop
+router.get("/shop",userController.loadShop)
 // wishlist
-// router.get('/wishlist',userController.loadWishlist);
+router.get('/wishlist',userController.loadWishlist);
 // add to wish list
 router.post('/addToWishlist/:productId',userController.addToWishlist)
 // delete wishlist item
@@ -33,8 +35,9 @@ router.get('/cart',userController.getCart);
 router.post('/deleteCart/:productId',userController.deleteCart);
 // checkout page
 router.get('/checkout',userController.getCheckout);
+
 // address post
-router.post('/address',userController.addAddress);
+router.post('/addAddress',userController.addAddress);
 // myAccout
 router.get('/myAccount',userController.myAccount);
 // applying coupon

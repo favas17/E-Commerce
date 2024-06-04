@@ -82,14 +82,12 @@ const verifySignup = async (req,res)=>{
             // const secretKey = process.env.JWT_SECRET_KEY
             // const expiration = 10000;
             const userId = user._id;
+            req.session.userId = userId
             req.session.email = email;
             // const token = jwt.sign({userId: userId}, secretKey, {expiresIn: expiration});
             // req.session.userToken =  token;
 
-            // res.status(201).json({success:true,
-            //     message:"User created and otp sended succesfully"});
-                
-
+            
             // genarating otp
             const GenarateOtp = Math.floor(1000+Math.random()*9000);
             // storing the otp in session
@@ -132,7 +130,7 @@ const verifyLogin = async (req,res)=>{
             const userId = userData._id;
             // const token = jwt.sign({ userId: userId}, secretKey, {expiresIn: expiration});
             // req.session.token = token;
-            req.session.userId = userData._id;
+            req.session.userId = userId;
             req.session.email = userData.email;
             res.redirect('/userHome')
           }
@@ -146,7 +144,7 @@ const verifyLogin = async (req,res)=>{
 
 const loadOtp = async (req,res)=>{
     try {
-        res.render('otp',{mobile: req.session.mobile});
+        res.render('otp');
         
     } catch (error) {
         console.error(error)
@@ -217,27 +215,62 @@ const loadUserPage = async (req,res)=>{
     }
 }
 
-// wish list
-// const loadWishlist = async (req, res) => {
-//     try {
-//         const userId = req.session.userId;
-//         if (!userId) {
-//             return res.status(401).send('User not logged in');
-//         }
 
-//         const wishlist = await Wishlist_Model.findOne({ userId: userId }).populate('products');
-//         if (!wishlist || !wishlist.products) {
-//             return res.render('wishlist', { products: [] });
-//         }
+const loadShop = async (req,res)=>{
+    try {
 
-//         const products = wishlist.products.map(item => item.product);
+        // getting the categories of men and women
+        const menCategory = await Category_Model.findOne({category:'Men'}).select('subcategory');
+        const womenCategory = await Category_Model.findOne({category:'Women'}).select('subcategory');
 
-//         res.render('wishlist', { products });
-//     } catch (error) {
-//         console.error(error);
-//         res.render('404');
-//     }
-// };
+
+        const page = parseInt(req.query.page) || 1; // Current page number
+        const perPage = 10; // Number of items per page
+        const totalProducts = await PRODUCT.countDocuments(); // Total number of products
+        const totalPages = Math.ceil(totalProducts / perPage); // Total number of pages
+
+        const product = await PRODUCT.find()
+            .skip((page - 1) * perPage)
+            .limit(perPage);
+
+        res.render('shop', {
+            product,
+            menCategory,
+            womenCategory,
+            query: req.query.query,
+            currentPage: page,
+            hasNextPage: page < totalPages,
+            hasPreviousPage: page > 1,
+            nextPage: page + 1,
+            previousPage: page - 1,
+            lastPage: totalPages
+        });
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+const loadWishlist = async (req,res)=>{
+    try {
+        const userId = req.session.userId;
+        if (!userId) {
+            return res.status(401).send('User not logged in');
+        }
+
+       
+
+        const wishlist = await Wishlist_Model.find({user:userId}).populate('product')
+        if (!wishlist || !wishlist.product) {
+            return res.render('wishlist',{wishlist:wishlist[0].product});
+        }
+        // console.log(wishlist[0].product)
+        res.render('wishlist',{wishlist:wishlist[0].product})
+    } catch (error) {
+        console.error(error);
+        res.render('404')
+    }
+}
 
 
 // add to wishlist button work
@@ -320,20 +353,21 @@ const loadDetails = async (req,res)=>{
 
 // addToCart button work
 const addToCart = async (req, res) => {
-    // get the id from session and product id from params
     const userId = req.session.userId;
     const productId = req.params.productId;
-    // find the product from database using the product id amd put it into productFind
-    const productFind = await PRODUCT.findOne({ _id: productId });
-    // get the plus or minus operation
     const operation = req.params.operation;
+
     try {
-        if (!userId) {  
-            return res.status(500).send({ isInCart: false });
+        if (!userId) {
+            return res.status(401).send({ isInCart: false, message: 'User not logged in' });
         }
-        // get the cart of user using userid frm session
+
+        const productFind = await PRODUCT.findById(productId);
+        if (!productFind) {
+            return res.status(404).send({ message: 'Product not found' });
+        }
+
         let cart = await cart_Model.findOne({ user: userId });
-        // if a user does not have a cart then create
         if (!cart) {
             cart = new cart_Model({
                 user: userId,
@@ -342,54 +376,45 @@ const addToCart = async (req, res) => {
                 totalPrice: productFind.discountPrice,
             });
         } else {
-            // if user already has a cart then push it into the items arrray
-
-            // loop throug the items array in the cart in each index number
             const existingItemIndex = cart.items.findIndex(item => item.product.equals(productId));
-            // if the index is not less than -1 then the operations will work
             if (existingItemIndex !== -1) {
-                // get the cart.items to existing items 
                 const existingItem = cart.items[existingItemIndex];
-                // if the opereation is add
                 if (operation === 'add') {
-                    // items will update
                     existingItem.quantity += 1;
-                    existingItem.price += productFind.discountPrice;
+                    existingItem.price = existingItem.quantity * productFind.discountPrice;
                     cart.totalQuantity += 1;
                     cart.totalPrice += productFind.discountPrice;
-                    // if the operatin is minus
-                } else if (operation === 'minus' && existingItem.quantity >1) {
-                    // update the datas
+                } else if (operation === 'minus' && existingItem.quantity > 1) {
                     existingItem.quantity -= 1;
-                    existingItem.price -= productFind.discountPrice;
+                    existingItem.price = existingItem.quantity * productFind.discountPrice;
                     cart.totalQuantity -= 1;
                     cart.totalPrice -= productFind.discountPrice;
-                    console.log('Product removed');
-                    
                 }
-            }
-            // if ad add to cart works from home page or wishlist or details page
-             else {
-                // push the items to cart
-                    cart.items.push({ product: productFind._id, quantity: 1, price: productFind.discountPrice });
-                    cart.totalQuantity += 1;
-                    cart.totalPrice += productFind.discountPrice;
+            } else {
+                cart.items.push({ product: productFind._id, quantity: 1, price: productFind.discountPrice });
+                cart.totalQuantity += 1;
+                cart.totalPrice += productFind.discountPrice;
             }
         }
-        // send the updatedquantity subtotal and grand total to the fetch
+
         const updatedQuantity = cart.items.find(item => item.product.equals(productId)).quantity;
         const subtotal = cart.items.find(item => item.product.equals(productId)).price;
         const grandTotal = cart.totalPrice;
-        // saves the cart to database
-        await cart.save();  
 
-        console.log('Product added');
-        return res.status(200).send({ message: 'Product added to cart' ,updatedQuantity,subtotal,grandTotal});
+        await cart.save();
+
+        return res.status(200).send({
+            message: 'Product updated successfully',
+            updatedQuantity,
+            subtotal,
+            grandTotal
+        });
     } catch (error) {
         console.error(error);
         return res.status(500).send({ error: 'Internal server error' });
     }
-}
+};
+
 
 
 
@@ -451,6 +476,7 @@ const getCheckout = async (req,res)=>{
         res.render('404')
     }
 }
+
 
 // ading address
 const addAddress = async (req,res)=>{
@@ -549,35 +575,49 @@ const applyCoupon = async (req,res)=>{
 }
 
 
+// const addAddress = async (req, res) => {
+//     const { name, address, city, country, postCode, phone, email } = req.body;
+//     const userId = req.session.userId;
+
+//     try {
+//         if (!userId) {
+//             return res.status(500).send('User not found');
+//         }
+
+//         let userAddress = await address_Model.findOne({ user: userId });
+
+//         if (!userAddress) {
+//             const newAddress = new address_Model({
+//                 user: userId,
+//                 details: [{ name, address, city, country, postCode, phone, email }],
+//             });
+//             await newAddress.save();
+//         } else {
+//             await address_Model.findByIdAndUpdate(
+//                 userAddress._id,
+//                 { $push: { details: { name, address, city, country, postCode, phone, email } } },
+//                 { new: true }
+//             );
+//         }
+
+//         res.redirect('/checkout');
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send({ message: 'Server error' });
+//     }
+// };
+
+
+
 const orderOtp = async (req,res)=>{
     try {
         const email = req.session.email;
         // getting otp from genarate otp function
         const otp = genarateOtp();
         req.session.otp = otp;
+        res.render("orderOtp")
         // nodmailer
-        let transporter = nodemailer.createTransport({
-            service: 'Gmail',
-            auth: {
-                user: "favasfvs111@gmail.com",
-                pass: 'mltp emiy bymt baar'
-            }
-        });
-        // Set up email data
-        let mailOptions = {
-            from: 'favasfvs111@gmail.com',
-            to: email,
-            subject: 'Email Verification OTP',
-            text: `Your OTP for email verification is: ${otp}`
-        };
-        // Send the email
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                res.send('Error sending email.');
-            } else {
-                res.status(200).json({message:'otp sended'});
-            }
-        });
+        await sendMail(email,otp);      
     
     }      
      catch (error) {
@@ -671,7 +711,6 @@ const orderSuccess = async (req,res)=>{
 
 
 
-
 // categories for hoe page
 const categoriesHome = async (req,res)=>{
     try {
@@ -723,7 +762,8 @@ module.exports = {
     loadOtp,
     verifyOtp,
     loadUserPage,
-    // loadWishlist,
+    loadShop,
+    loadWishlist,
     addToWishlist,
     deleteWishlist,
     loadDetails,

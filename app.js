@@ -21,7 +21,7 @@ app.use(express.static('public'));
 app.use(session({
   secret: '111',
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized:false,
 }));
 
 app.set('view engine', 'ejs');

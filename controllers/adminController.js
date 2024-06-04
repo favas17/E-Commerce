@@ -12,7 +12,8 @@ const category = require('../models/categoryModel');
 
 const loadAdminHome = async (req,res)=>{
     try {
-        res.render('adminHome')
+        const users = await user.find();
+        res.render('adminHome',{users})
     } catch (error) {
         res.render('404')
     }

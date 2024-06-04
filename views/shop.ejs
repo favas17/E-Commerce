@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evara - Unleashing Elegance in Every Purchase | Premium Home Decor & Lifestyle Essentials</title>
+    
+    <!-- Meta Description -->
+    <meta name="description" content="Discover luxury at Evara! Explore exquisite home decor & lifestyle essentials. Elevate your space with timeless elegance. Shop now!">
+    
+    <!-- Keywords -->
+    <meta name="keywords" content="Luxury Home Decor, Premium Lifestyle Essentials, Elegant Furnishings, Stylish Homeware, Exclusive Interior Accessories, Chic Decor Accents, Unique Home Furnishings">
+
+    <!-- Robots Meta Tag -->
+    <meta name="robots" content="index, follow">
+    
+    <!-- OG (Open Graph) Tags -->
+    <meta property="og:title" content="Evara - Unleashing Elegance in Every Purchase | Premium Home Decor & Lifestyle Essentials">
+    <meta property="og:description" content="Discover luxury at Evara! Explore exquisite home decor & lifestyle essentials. Elevate your space with timeless elegance. Shop now!">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:title" content="Evara - Unleashing Elegance in Every Purchase | Premium Home Decor & Lifestyle Essentials">
+    <meta name="twitter:description" content="Discover luxury at Evara! Explore exquisite home decor & lifestyle essentials. Elevate your space with timeless elegance. Shop now!">
+    <!-- =================================================================
+                             Link Custom CSS File
+    ================================================================== -->
+    <link rel="stylesheet" href="/userHome.css">
+
+    <!-- =================================================================
+                             Link Favicon
+    ================================================================== -->
+    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
+    <!-- =================================================================
+                             SWIPER JS CDN
+    ================================================================== -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <!-- =================================================================
+                             Remix Icon CDN
+    ================================================================== -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.7.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+
+    <%- include('includes/header') %>
+
+    <section class="products section container">
+        <div class="tab-btns flexitem">
+            <span class="tab-btn active-tab" data-target="#featured">Featured</span>   
+            <span class="tab-btn" data-target="#popular">Popular</span>
+            <span class="tab-btn" data-target="#new-added">New Added</span>
+        </div>
+
+        <div class="tab-items">
+            <div class="tab-item active-tab" content id="featured">
+                <div class="products-container grid" id="productList">
+                    <% product.forEach(function(product) { %>
+                        <div class="product-item">
+                            <div class="product-banner">
+                                <a href="/details/<%= product._id %>" class="product-images">
+                                    <img src="/uploads/<%= product.productImage2%>" alt="1" class="product-img default">
+                                    <img src="/uploads/<%= product.productImage2%>" alt="1" class="product-img hover">
+                                </a>
+
+                                <!-- <div class="product-actions">
+                                    <button class="action-btn" aria-label="Quick View">
+                                        <i class="ri ri-eye-line"></i>
+                                    </button>
+                                
+                                    <button class="action-heart-btn" onclick="addToWishlist('<%= product._id %>')" aria-label="Add to Wishlist">
+                                        <i class="ri ri-heart-3-line"></i>
+                                    </button>
+                                
+                                    <button class="action-btn" aria-label="Compare">
+                                        <i class="ri ri-shuffle-line"></i>
+                                    </button>
+                                </div> -->
+                                
+                            </div>
+
+                            <div class="product-content">
+                                <span class="product-category"><%= product.category %></span>
+                                <a href="details.html">
+                                    <h3 class="product-title"><%= product.name %></h3>
+                                </a>
+                                <div class="product-rating">
+                                    <!-- Your rating display logic here -->
+                                </div>
+                                <div class="product-price flexitem">
+                                    <span class="new-price">₹<%= product.discountPrice %></span>
+                                    <span class="old-price">₹<%= product.price %></span>
+                                </div>
+
+                                <button class="action-btn cart-btn" aria-label="Add to Cart" onclick="addToCart('<%= product._id %>','add')">
+                                    <i class="ri-shopping-bag-line"></i>
+                                    </button>
+                                <button id="wishlistButton-<%= product._id %>"  class="action-heart-btn" onclick="addToWishlist('<%= product._id %>')" >
+                                        <i class="ri ri-heart-3-line"></i>
+                                    </button>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+               
+            </div>    
+        </div>
+        <div class="pagination">
+            <% if(hasPreviousPage) { %>
+                <a href="?query=<%= query %>&page=<%= previousPage %>">&laquo; Previous</a>
+            <% } %>
+            <% if(hasNextPage) { %>
+                <a href="?query=<%= query %>&page=<%= nextPage %>">Next &raquo;</a>
+            <% } %>
+        </div>
+    </section>
+
+
+    <%- include('includes/footer') %>
+
+</body>
+</html>
