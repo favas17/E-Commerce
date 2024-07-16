@@ -12,7 +12,7 @@
     <!-- Keywords -->
     <meta name="keywords" content="Luxury Home Decor, Premium Lifestyle Essentials, Elegant Furnishings, Stylish Homeware, Exclusive Interior Accessories, Chic Decor Accents, Unique Home Furnishings">
 
-        <!-- Robots Meta Tag -->
+    <!-- Robots Meta Tag -->
     <meta name="robots" content="index, follow">
     
     <!-- OG (Open Graph) Tags -->
@@ -23,39 +23,28 @@
     <!-- Twitter Card Tags -->
     <meta name="twitter:title" content="Evara - Unleashing Elegance in Every Purchase | Premium Home Decor & Lifestyle Essentials">
     <meta name="twitter:description" content="Discover luxury at Evara! Explore exquisite home decor & lifestyle essentials. Elevate your space with timeless elegance. Shop now!">
-    <!-- =================================================================
-                             Link Custom CSS File
-    ================================================================== -->
+    
+    <!-- Custom CSS File -->
     <link rel="stylesheet" href="/style.css">
 
-    <!-- =================================================================
-                             Link Favicon
-    ================================================================== -->
+    <!-- Favicon -->
     <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
 
-    <!-- =================================================================
-                             SWIPER JS CDN
-    ================================================================== -->
+    <!-- SWIPER JS CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     
-
-
-    <!-- =================================================================
-                             Remix Icon CDN
-    ================================================================== -->
+    <!-- Remix Icon CDN -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.7.0/fonts/remixicon.css" rel="stylesheet">
 </head>
 
 <body>
 
-    <!-- ================================================ HEADER ================================================ -->
-    
+    <!-- HEADER -->
     <%- include('includes/header') %>
 
-
-    <!-- ================================================ MAIN ================================================ -->
+    <!-- MAIN -->
     <main class="main">
-        <!-- ================================================ BREADCRUMB ================================================ -->
+        <!-- BREADCRUMB -->
         <section class="breadcrumb">
             <ul class="breadcrumb-list flexitem container">
                 <li><a href="index.html" class="breadcrumb-link">Home</a></li>
@@ -66,12 +55,10 @@
             </ul>
         </section>
 
-        <!-- ================================================ CHECKOUT ================================================ -->
+        <!-- CHECKOUT -->
         <section class="checkout section-lg">
             <div class="checkout-container container grid">
-
                 <div class="checkout-group">
-
                     <h3 class="section-title">Cart Totals</h3>
                     <table class="order-table">
                         <tr>
@@ -87,15 +74,12 @@
                             </td>
                             <td><span class="table-price">₹<%= item.price %></span></td>
                         </tr>
-                      
                         <% }) %>
 
-                        <% if(cart.items.length>0) { %>
-
-                        
+                        <% if(cart.items.length > 0) { %>
                         <tr>
                             <td><span class="order-subtitle">Subtotal</span></td>
-                            <td colspan="2"><span class="table-price">₹<%=cart.totalPrice %></span></td>
+                            <td colspan="2"><span class="table-price">₹<%= cart.totalPrice %></span></td>
                         </tr>
                         <tr>
                             <td><span class="order-subtitle">Shipping</span></td>
@@ -103,132 +87,90 @@
                         </tr>
                         <tr>
                             <td><span class="order-subtitle">Total</span></td>
-                            <td id="Grandtotal" colspan="2">₹<%=cart.totalPrice %>  <span class="order-grand-total">₹</span></td>
+                            <td colspan="2" id="Grandtotal">₹<%= cart.totalPrice %> <span class="order-grand-total"></span></td>
                         </tr>
-                    
-                    </table>
+                        </table>
 
-                    <div class="cart-coupon">
-                        <h3 class="section-title">Apply Coupon</h3>
-
+                        <div class="cart-coupon">
+                            <h3 class="section-title">Apply Coupon</h3>
                             <div class="form-group grid">
                                 <input id="couponField" type="text" class="form-input" placeholder="Enter Your Coupon">
-
                                 <div class="form-btn">
-                                    <button onclick="applyCoupon('<%= cart.totalPrice %>')"  class="btn flexitem btn-sm">
+                                    <button onclick="applyCoupon('<%= cart.totalPrice %>')" class="btn flexitem btn-sm">
                                         <i class="ri-coupon-2-line"></i> Apply
                                     </button>
                                 </div>
                             </div>
-                    </div>
-
-                    <% } %>
-
-                    <div class="checkout-group">
-                        <h3 class="section-title">Billing Details</h3>
-                        <label for="addressSelect">Address</label>
-                        <select id="addressSelect" name="parentAddress" class="form-input">
-                            <% address.forEach((address)=> { %>
-                            <option value="<%= address._id %>"><%= address.details[0].name%>,<%= address.details[0].address %>,<%= address.details[0].city %>,<%= address.details[0].country %>,<%= address.details[0].postCode %>,<%= address.details[0].phone %>,<%= address.details[0].email %>,</option>
-                        <% }) %>
-                        </select>
-                        
-    
-                        
-                    </div>
-
-                    <!-- payment section -->
-
-                    <div class="payment-methods">
-                        <h3 class="checkout-title payment-title">Payment</h3>
-                        <div class="payment-option flexitem">
-                            <input type="radio" id="onlineBanking" name="selectedPayment" value="onlineBanking" class="payment-input">
-                            <label for="onlineBanking" class="payment-label">Online Banking</label>
                         </div>
-    
-                        <div class="payment-option flexitem">
-                            <input type="radio" id="COD" name="selectedPayment" value="COD" class="payment-input">
-                            <label for="COD" class="payment-label">Cash On Delivery</label>
+                        <% } %>
+
+                        <div class="checkout-group">
+                            <h3 class="section-title">Billing Details</h3>
+                            <label for="addressSelect">Address</label>
+                            <select id="addressSelect" name="parentAddress" class="form-input">
+                                <% address.forEach(address => { %>
+                                <option value="<%= address._id %>"><%= address.details[0].name %>, <%= address.details[0].address %>, <%= address.details[0].city %>, <%= address.details[0].country %>, <%= address.details[0].postCode %>, <%= address.details[0].phone %>, <%= address.details[0].email %></option>
+                                <% }) %>
+                            </select>
                         </div>
+
+                        <!-- Payment Section -->
+                        <form id="orderForm">
+                            <div class="payment-methods">
+                                <h3 class="checkout-title payment-title">Payment</h3>
+                                <div class="payment-option flexitem">
+                                    <input type="radio" id="onlineBanking" name="selectedPayment" value="onlineBanking" class="payment-input">
+                                    <label for="onlineBanking" class="payment-label">Online Banking</label>
+                                </div>
+                                <div class="payment-option flexitem">
+                                    <input type="radio" id="COD" name="selectedPayment" value="COD" class="payment-input">
+                                    <label for="COD" class="payment-label">Cash On Delivery</label>
+                                </div>
+                            </div>
+                            <button type="button" id="placeOrder" class="btn btn-md">Place Order</button>
+                        </form>
                     </div>
-                    
-                    <button id="placeOrder" class="btn btn-md" >Place Order</button>
                 </div>
             </div>
         </section>
-
     </main>
 
-    <!-- ================================================ FOOTER ================================================ -->
- 
+    <!-- FOOTER -->
     <%- include('includes/footer') %>
 
-
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <!-- =================================================================
-                             Link Custom JS File
-    ================================================================== -->
     <script src="assets/js/script.js"></script>
-    
     <script>
-        async function addAddress(){
+        async function applyCoupon(totalPrice) {
             try {
-                const response = await fetch(`/addAddress`,{
+                const couponCode = document.getElementById('couponField').value;
+                console.log(couponCode, 'okok');
+
+                const response = await fetch(`/applyCoupon/${totalPrice}`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
-                    
-                })
-                if(!response){
-                    throw new Error('network error')
-                }
-
-            } catch (error) {
-                
-            }
-        }
-
-
-
-
-        async function applyCoupon(totalPrice){
-            try{
-                const couponCode = document.getElementById('couponField').value;
-                console.log(couponCode,'okok')
-
-                const response = await fetch(`/applyCoupon/${totalPrice}`,{
-                    method:'POST',
-                    headers: {
-                        'Content-Type':'application/json',
-                    },
-                    body: JSON.stringify({couponCode}),
+                    body: JSON.stringify({ couponCode }),
                 });
 
-                if(!response.ok){
-                    throw new Error('network error')
+                if (!response.ok) {
+                    throw new Error('Network error');
                 }
 
                 const data = await response.json();
+                const total = document.querySelector('#Grandtotal');
 
-               
-
-                const total = document.querySelector('#Grandtotal')
-
-                if(total){
-                    total.textContent =     data.GrandTotal
+                if (total) {
+                    total.textContent = `₹${data.GrandTotal}`;
                 }
-               
-            }
-            catch(error){
+            } catch (error) {
                 console.error(error);
             }
         }
     </script>
-
-<script src="/scripts/orderPlacing.js"></script>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
+    <script src="/scripts/orderPlacing.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </body>
 
 </html>

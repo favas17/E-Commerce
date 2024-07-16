@@ -17,7 +17,7 @@ const sendMail = async (email, otp) => {
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Welcome to E-commerce</title>
+                <title>Welcome to Evara</title>
                 <style>
                     body {
                         font-family: Arial, sans-serif;
@@ -57,13 +57,13 @@ const sendMail = async (email, otp) => {
             </head>
             <body>
                 <div class="container">
-                    <h1>Welcome to Trip Tango!</h1>
+                    <h1>Welcome to Evara!</h1>
                     <p>Dear User,</p>
-                    <p>We are delighted to welcome you to Trip Tango, you're travel partner.</p>
+                    <p>We are delighted to welcome you to Evara.</p>
                     <p>To complete your registration, please use the OTP provided below:</p>
                     <p class="otp">${otp}</p>
                     <p>If you have any questions or need assistance, feel free to contact us.</p>
-                    <p>Best Regards,<br/>The Trip Tango Team</p>
+                    <p>Best Regards,<br/>The Evara Team</p>
                 </div>
             </body>
             </html>
@@ -71,7 +71,7 @@ const sendMail = async (email, otp) => {
     let mailOption = {
       from: "favasfvs111@gmail.com",
       to: email,
-      subject: "Welcome to Trip Tango - Complete Your Registration!",
+      subject: "Welcome to Evara - Complete Your Registration!",
       html: template,
     };
     await transporter.sendMail(mailOption);

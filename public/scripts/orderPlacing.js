@@ -1,91 +1,138 @@
-    // Function to handle form submission for online banking
-
-   async function submitOnlineBanking(selectedAddressId) {
+// Add event listener to the Place Order button
+document.getElementById('placeOrder').addEventListener('click', async () => {
     try {
-        const response =  await fetch('/razorpayOrder',{
+        const selectedPayment = document.querySelector('input[name="selectedPayment"]:checked').value;
+        const selectedAddressId = document.getElementById('addressSelect').value;
+
+        if (!selectedPayment || !selectedAddressId) {
+            alert('Please select a payment method and address');
+            return;
+        }
+
+        if (selectedPayment === 'onlineBanking') {
+            await submitOnlineBanking(selectedAddressId);
+        } else if (selectedPayment === 'COD') {
+            await submitCOD(selectedAddressId);
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Failed to place order. Please try again.');
+    }
+});
+
+
+
+// Function to handle form submission for online banking
+// Add event listener to the Place Order button
+document.getElementById('placeOrder').addEventListener('click', async () => {
+    try {
+        const selectedPayment = document.querySelector('input[name="selectedPayment"]:checked').value;
+        const selectedAddressId = document.getElementById('addressSelect').value;
+
+        if (!selectedPayment || !selectedAddressId) {
+            alert('Please select a payment method and address');
+            return;
+        }
+
+        if (selectedPayment === 'onlineBanking') {
+            await submitOnlineBanking(selectedAddressId);
+        } else if (selectedPayment === 'COD') {
+            await submitCOD(selectedAddressId);
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Failed to place order. Please try again.');
+    }
+});
+
+
+async function storeDetails(orderDetails, selectedAddressId) {
+    try {
+        const response = await fetch('/detailsStoring', {
             method: 'POST',
             headers: {
-                'Content-Type':'application/json'   
+                'Content-Type': 'application/json'
             },
-            body:JSON.stringify({selectedAddressId})
+            body: JSON.stringify({ orderDetails, selectedAddressId }),
         });
 
-        if(response==500){
-            alert('please select the address')
-        }
-        if(!response.ok){
-            throw new Error('network error')
+        if (!response.ok) {
+            throw new Error('Network error');
         }
 
-        const data = await response.json();
-        const razorpayOrders = data.razorpayOrderss;
-
-        const options = {
-            key: 'rzp_test_GxkKU3BnKyKe6Z',
-            amount: razorpayOrders.amount,
-            currency: razorpayOrders.currency,
-            handler: async function(response) {
-                // Handle payment success
-                alert('Payment successful! Payment ID: ' + response.razorpay_payment_id);
-
-                await storeDetails(razorpayOrders,selectedAddressId);
-            }
-        };
-        const razorpay = new Razorpay(options);
-        razorpay.open();
-
-        } catch (error) {
-        console.error(error);
-    }
-};
-
-async function storeDetails(orderDetails,selectedAddressId){
-    try{
-    const response = await fetch('/detailsStoring',{
-        method:'POST',
-        headers: {
-            'Content-Type':'application/json'
-        },
-        body: JSON.stringify({orderDetails,selectedAddressId}),
-    });
-
-    if(!response.ok){
-        throw new Error('network error')
-    };
-
-    console.log('details submited')
-
-    }
-    catch(error){
-        console.error(error);
-    }
-
-
-}
-
-// Function to handle form submission for Cash On Delivery (COD)
-async function submitCOD() {
-    try {
- 
-        // Your code to redirect to OTP entering page
-        window.location.href = '/orderOtp';
-         // Example URL for OTP entering page
+        console.log('Details submitted');
     } catch (error) {
         console.error(error);
     }
 }
 
+
+// Function to handle form submission for Cash On Delivery (COD)
+async function submitCOD(selectedAddressId) {
+    if (!selectedAddressId) {
+        alert('Please select an address before proceeding.');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/createOrder', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ paymentMethod: 'COD', addressId: selectedAddressId })
+        });
+
+        if (!response.ok) {
+            throw new Error('Network error');
+        }
+
+        const data = await response.json();
+        
+        // Redirect to OTP entering page
+        window.location.href = `/orderOtp?orderId=${data.orderId}`;
+    } catch (error) {
+        console.error(error);
+        alert('An error occurred. Please try again.');
+    }
+}
+
 // Add event listener to the Place Order button
-document.getElementById('placeOrder').addEventListener('click', async function() {
-    // Get the selected payment method
-    const paymentMethod = document.querySelector('input[name="selectedPayment"]:checked').value;
-    const selectedAddressId = document.getElementById("addressSelect").value;
+// Client-side JavaScript for handling order placement
+document.getElementById('placeOrder').addEventListener('click', async () => {
+    try {
+        const selectedPayment = document.querySelector('input[name="selectedPayment"]:checked').value;
+        const selectedAddressId = document.getElementById('addressSelect').value;
 
+        if (!selectedPayment || !selectedAddressId) {
+            alert('Please select a payment method and address');
+            return;
+        }
 
-    // Check the selected payment method and call the appropriate function
-    if (paymentMethod === 'onlineBanking') {
-        await submitOnlineBanking(selectedAddressId);
-    } else if (paymentMethod === 'COD') {
-        await submitCOD();
+        const response = await fetch('/placeOrder', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ selectedPayment, selectedAddressId }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network error');
+        }
+
+        const data = await response.json();
+
+        if (data.message === 'COD') {
+            // Redirect to COD OTP verification page
+            window.location.href = '/orderOtp';
+        } else if (data.orderId) {
+            // Redirect to success page (replace with your actual success page)
+            window.location.href = `/orderSuccess/${data.orderId}`;
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Failed to place order. Please try again.');
     }
 });
+
